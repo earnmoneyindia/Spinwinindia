@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Spin & Win India</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<header>
+
+<h1>Spin & Win India 🇮🇳</h1>
+
+<p>Play • Spin • Win Coins</p>
+
+</header>
+
+
+<div class="coins">
+
+Coins: <span id="coins">100</span>
+
+</div>
+
+
+<div class="container">
+
+<div class="pointer">🔻</div>
+
+<div id="wheel"></div>
+
+<button onclick="spin()">SPIN (10 Coins)</button>
+
+</div>
+
+
+<div class="menu">
+
+<button onclick="dailyBonus()">🎁 Daily Bonus</button>
+
+<button onclick="alert('Scratch Card coming soon')">🎫 Scratch Card</button>
+
+<button onclick="alert('Lucky Number coming soon')">🔢 Lucky Number</button>
+
+</div>
+
+
+<div class="popup" id="popup">
+
+<div class="popup-content">
+
+<h2 id="resultText"></h2>
+
+<button onclick="closePopup()">OK</button>
+
+</div>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
