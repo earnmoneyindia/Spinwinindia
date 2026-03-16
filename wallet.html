@@ -1,1 +1,68 @@
-wallet
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Wallet - Earn Money India</title>
+
+<link rel="stylesheet" href="Style.css">
+
+</head>
+
+<body>
+
+<header>
+
+<img src="Swilogo.png" width="200">
+
+<h2>Wallet</h2>
+
+</header>
+
+
+<div class="wallet-box">
+
+<h3>Balance : ₹<span id="walletBalance">0</span></h3>
+
+<p>Minimum Withdraw : ₹200</p>
+
+</div>
+
+
+<div class="withdraw-box">
+
+<input type="text" id="upi" placeholder="Enter UPI ID">
+
+<button onclick="withdraw()">Request Withdrawal</button>
+
+</div>
+
+
+<div class="history">
+
+<h3>Withdrawal History</h3>
+
+<div id="historyList">
+
+No withdrawals yet
+
+</div>
+
+</div>
+
+
+<button onclick="window.location.href='index.html'">
+
+⬅ Back to Game
+
+</button>
+
+
+<script type="module" src="wallet.js"></script>
+
+</body>
+
+</html>
