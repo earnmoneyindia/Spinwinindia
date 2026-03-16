@@ -62,12 +62,13 @@ function updateCoins(){
 
 document.getElementById("coins").innerText = coins;
 
+document.getElementById("wallet").innerText = wallet;
+
 convertWallet();
 
 saveData();
 
 }
-
 
 // WALLET CONVERSION
 function convertWallet(){
