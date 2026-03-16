@@ -6,9 +6,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Spin & Win India</title>
+<title>Earn Money India - Spin & Win</title>
 
 <link rel="stylesheet" href="Style.css">
+
+<!-- Google AdSense -->
+<script async
+src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXX"
+crossorigin="anonymous"></script>
 
 </head>
 
@@ -16,25 +21,33 @@
 
 <header>
 
-<img src="Swilogo.png" width="240">
+<img src="Swilogo.png" width="200">
 
 <h1>Spin & Win India 🇮🇳</h1>
 
 <p>Play • Spin • Win Coins</p>
 
-  <button onclick="logout()" class="logout">Logout</button>
+<button onclick="logout()" class="logout">
+Logout
+</button>
 
 </header>
 
 
+<!-- Balance Section -->
+
 <div class="balance">
 
-Coins: <span id="coins">0</span>  
+Coins: <span id="coins">0</span>
+
+|
 
 Wallet: ₹<span id="wallet">0</span>
 
 </div>
 
+
+<!-- Spin Game -->
 
 <div class="container">
 
@@ -42,25 +55,56 @@ Wallet: ₹<span id="wallet">0</span>
 
 <div id="wheel"></div>
 
-<button onclick="spin()">SPIN (10 Coins)</button>
+<button onclick="spin()" id="spinBtn">
+SPIN (10 Coins)
+</button>
 
 </div>
 
 
+<!-- Reward Ad -->
+
+<div class="ad-box">
+
+<ins class="adsbygoogle"
+style="display:block"
+data-ad-client="ca-pub-XXXXXXXX"
+data-ad-slot="1234567890"
+data-ad-format="auto"
+data-full-width-responsive="true">
+</ins>
+
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+</div>
+
+
+<!-- Menu -->
+
 <div class="menu">
 
-<button onclick="dailyBonus()">🎁 Daily Bonus</button>
+<button onclick="dailyBonus()">
+🎁 Daily Bonus
+</button>
 
-<button onclick="alert('Scratch Card coming soon')">🎫 Scratch Card</button>
+<button onclick="alert('Scratch Card coming soon')">
+🎫 Scratch Card
+</button>
 
-<button onclick="alert('Lucky Number coming soon')">🔢 Lucky Number</button>
+<button onclick="alert('Lucky Number coming soon')">
+🔢 Lucky Number
+</button>
 
 <button onclick="window.location.href='wallet.html'">
 💰 Wallet
 </button>
-  
+
 </div>
 
+
+<!-- Popup -->
 
 <div class="popup" id="popup">
 
@@ -75,38 +119,13 @@ Wallet: ₹<span id="wallet">0</span>
 </div>
 
 
+<!-- Scripts -->
+
 <script type="module" src="firebase.js"></script>
+<script type="module" src="auth.js"></script>
 <script type="module" src="Script.js"></script>
 
-  <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-const firebaseConfig = {
-apiKey: "AIzaSyDXws-cPYl9uoLTDuIY8iBCzYmgs6z5BGs",
-authDomain: "spinwinindia.firebaseapp.com",
-projectId: "spinwinindia",
-storageBucket: "spinwinindia.firebasestorage.app",
-messagingSenderId: "413087280761",
-appId: "1:413087280761:web:2f37b4a1a60a50094baea8",
-measurementId: "G-GKGVS527MR"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-onAuthStateChanged(auth,(user)=>{
-
-if(!user){
-
-window.location.href="login.html";
-
-}
-
-});
-
-</script>
 </body>
 
 </html>
