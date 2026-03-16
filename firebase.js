@@ -2,8 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// Your Firebase config (replace with your code)
-
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyDXws-cPYl9uoLTDuIY8iBCzYmgs6z5BGs",
   authDomain: "spinwinindia.firebaseapp.com",
@@ -17,3 +16,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+
+// make database global
+window.db = db;
