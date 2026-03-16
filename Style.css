@@ -24,6 +24,20 @@ h1{
 color:#ffcc00;
 }
 
+.logout{
+
+position:absolute;
+top:20px;
+right:20px;
+background:#ff4444;
+color:white;
+border:none;
+padding:8px 14px;
+border-radius:6px;
+cursor:pointer;
+
+}
+
 p{
 margin-top:5px;
 font-size:16px;
