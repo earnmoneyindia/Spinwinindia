@@ -13,7 +13,7 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
 
-apiKey: "YOUR_API_KEY",
+apiKey: "AIzaSyDXws-cPYl9uoLTDuIY8iBCzYmgs6z5BGs",
 
 authDomain: "spinwinindia.firebaseapp.com",
 
@@ -21,12 +21,11 @@ projectId: "spinwinindia",
 
 storageBucket: "spinwinindia.appspot.com",
 
-messagingSenderId: "XXXXXXXX",
+messagingSenderId: "413087280761",
 
-appId: "XXXXXXXX"
+appId: "1:413087280761:web:2f37b4a1a60a50094baea8"
 
 };
-
 
 const app = initializeApp(firebaseConfig);
 
