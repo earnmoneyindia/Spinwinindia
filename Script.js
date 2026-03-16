@@ -1,19 +1,73 @@
-let wheel=document.getElementById("wheel");
+import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-let coins=parseInt(localStorage.getItem("coins")) || 100;
+let wheel = document.getElementById("wheel");
+
+let coins = 0;
+
+let rewards=[5,10,20,0,15,50];
+
+
+// LOAD COINS FROM FIREBASE
+
+async function loadCoins(){
+
+const userRef = doc(window.db,"users","testuser");
+
+const snap = await getDoc(userRef);
+
+if(snap.exists()){
+
+coins = snap.data().coins;
+
+document.getElementById("coins").innerText = coins;
+
+}
+
+}
+
+loadCoins();
+
+
+// SAVE COINS
+
+async function saveCoins(){
+
+const userRef = doc(window.db,"users","testuser");
+
+await updateDoc(userRef,{
+
+coins: coins
+
+});
+
+}
+
+
+// UPDATE COINS UI
+
+function updateCoins(){
 
 document.getElementById("coins").innerText=coins;
 
-let rewards=[5,10,20,0,15,50];
+saveCoins();
+
+}
+
+
+// SPIN FUNCTION
 
 function spin(){
 
 if(coins<10){
+
 alert("Not enough coins!");
+
 return;
+
 }
 
 coins-=10;
+
 updateCoins();
 
 let rand=Math.floor(Math.random()*rewards.length);
@@ -36,13 +90,8 @@ showPopup("🎉 You won "+reward+" coins!");
 
 }
 
-function updateCoins(){
 
-document.getElementById("coins").innerText=coins;
-
-localStorage.setItem("coins",coins);
-
-}
+// POPUP
 
 function showPopup(text){
 
@@ -52,17 +101,27 @@ document.getElementById("popup").style.display="flex";
 
 }
 
+
+// CLOSE POPUP
+
 function closePopup(){
 
 document.getElementById("popup").style.display="none";
 
 }
 
-function dailyBonus(){
+
+// DAILY BONUS
+
+async function dailyBonus(){
 
 let today=new Date().toDateString();
 
-let last=localStorage.getItem("daily");
+const userRef = doc(window.db,"users","testuser");
+
+const snap = await getDoc(userRef);
+
+let last = snap.data().daily;
 
 if(last==today){
 
@@ -74,9 +133,15 @@ return;
 
 coins+=20;
 
-updateCoins();
+await updateDoc(userRef,{
 
-localStorage.setItem("daily",today);
+coins: coins,
+
+daily: today
+
+});
+
+updateCoins();
 
 alert("🎁 Daily Bonus: 20 coins");
 
