@@ -70,6 +70,35 @@ Coins: <span id="coins">0</span>
 <script type="module" src="firebase.js"></script>
 <script type="module" src="Script.js"></script>
 
+  <script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyDXws-cPYl9uoLTDuIY8iBCzYmgs6z5BGs",
+authDomain: "spinwinindia.firebaseapp.com",
+projectId: "spinwinindia",
+storageBucket: "spinwinindia.firebasestorage.app",
+messagingSenderId: "413087280761",
+appId: "1:413087280761:web:2f37b4a1a60a50094baea8",
+measurementId: "G-GKGVS527MR"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+onAuthStateChanged(auth,(user)=>{
+
+if(!user){
+
+window.location.href="login.html";
+
+}
+
+});
+
+</script>
 </body>
 
 </html>
