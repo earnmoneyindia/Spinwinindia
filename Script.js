@@ -6,9 +6,10 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import { db } from "./firebase.js";
 
+const auth = getAuth();
 
-let wheel = document.getElementById("wheel");
-let spinBtn = document.querySelector("button");
+let wheel;
+let spinBtn;
 
 let coins = 0;
 let wallet = 0;
@@ -16,7 +17,14 @@ let uid = "";
 
 let rewards = [5,10,20,0,15,50];
 
-const auth = getAuth();
+
+// Wait until page loads
+window.addEventListener("DOMContentLoaded",()=>{
+
+wheel = document.getElementById("wheel");
+spinBtn = document.getElementById("spinBtn");
+
+});
 
 
 // LOAD USER DATA
@@ -32,10 +40,11 @@ const snap = await getDoc(userRef);
 
 if(snap.exists()){
 
-coins = snap.data().coins;
-wallet = snap.data().wallet;
+coins = snap.data().coins || 0;
+wallet = snap.data().wallet || 0;
 
 document.getElementById("coins").innerText = coins;
+document.getElementById("wallet").innerText = wallet;
 
 }
 
@@ -44,7 +53,8 @@ document.getElementById("coins").innerText = coins;
 });
 
 
-// SAVE DATA TO FIRESTORE
+
+// SAVE DATA
 async function saveData(){
 
 const userRef = doc(db,"users",uid);
@@ -57,25 +67,27 @@ wallet: wallet
 }
 
 
-// COIN DISPLAY UPDATE
+
+// UPDATE DISPLAY
 function updateCoins(){
 
-document.getElementById("coins").innerText = coins;
-
-document.getElementById("wallet").innerText = wallet;
-
 convertWallet();
+
+document.getElementById("coins").innerText = coins;
+document.getElementById("wallet").innerText = wallet;
 
 saveData();
 
 }
 
-// WALLET CONVERSION
+
+
+// COIN → WALLET
 function convertWallet(){
 
 if(coins >= 100){
 
-let rupees = Math.floor(coins/100);
+let rupees = Math.floor(coins / 100);
 
 wallet += rupees;
 
@@ -86,7 +98,8 @@ coins = coins % 100;
 }
 
 
-// SPIN FUNCTION
+
+// SPIN BUTTON
 window.spin = function(){
 
 if(coins < 10){
@@ -99,6 +112,27 @@ return;
 
 spinBtn.disabled = true;
 
+
+// Show ad before spin
+try{
+(adsbygoogle = window.adsbygoogle || []).push({});
+}catch(e){}
+
+
+// Small delay
+setTimeout(()=>{
+
+startSpin();
+
+},1500);
+
+}
+
+
+
+// SPIN LOGIC
+function startSpin(){
+
 coins -= 10;
 
 updateCoins();
@@ -109,9 +143,10 @@ sound.play();
 
 let rand = Math.floor(Math.random()*rewards.length);
 
-let deg = 720 + rand*60;
+let deg = 720 + rand * 60;
 
 wheel.style.transform = "rotate("+deg+"deg)";
+
 
 setTimeout(()=>{
 
@@ -121,13 +156,14 @@ coins += reward;
 
 updateCoins();
 
-showPopup("🎉 +"+reward+" coins");
+showPopup("🎉 +" + reward + " coins");
 
 spinBtn.disabled = false;
 
 },4000);
 
 }
+
 
 
 // POPUP
@@ -146,12 +182,14 @@ closePopup();
 }
 
 
+
 // CLOSE POPUP
 window.closePopup = function(){
 
 document.getElementById("popup").style.display="none";
 
 }
+
 
 
 // DAILY BONUS
@@ -176,10 +214,8 @@ return;
 coins += 20;
 
 await updateDoc(userRef,{
-
 coins: coins,
 daily: today
-
 });
 
 updateCoins();
