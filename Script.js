@@ -144,3 +144,18 @@ updateCoins();
 alert("🎁 Daily Bonus: 20 coins");
 
 }
+
+import { getAuth, signOut } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const auth = getAuth();
+
+window.logout = function(){
+
+signOut(auth).then(()=>{
+
+window.location.href="login.html";
+
+});
+
+}
