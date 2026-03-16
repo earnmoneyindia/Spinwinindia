@@ -1,23 +1,39 @@
-import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import { doc, getDoc, updateDoc } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import { db } from "./firebase.js";
+
 
 let wheel = document.getElementById("wheel");
+let spinBtn = document.querySelector("button");
 
 let coins = 0;
+let wallet = 0;
+let uid = "";
 
 let rewards = [5,10,20,0,15,50];
 
+const auth = getAuth();
 
-// LOAD COINS FROM FIREBASE
 
-async function loadCoins(){
+// LOAD USER DATA
+onAuthStateChanged(auth, async (user)=>{
 
-const userRef = doc(window.db,"users","testuser");
+if(user){
+
+uid = user.uid;
+
+const userRef = doc(db,"users",uid);
 
 const snap = await getDoc(userRef);
 
 if(snap.exists()){
 
 coins = snap.data().coins;
+wallet = snap.data().wallet;
 
 document.getElementById("coins").innerText = coins;
 
@@ -25,35 +41,51 @@ document.getElementById("coins").innerText = coins;
 
 }
 
-loadCoins();
+});
 
 
-// SAVE COINS TO FIREBASE
+// SAVE DATA TO FIRESTORE
+async function saveData(){
 
-async function saveCoins(){
-
-const userRef = doc(window.db,"users","testuser");
+const userRef = doc(db,"users",uid);
 
 await updateDoc(userRef,{
-coins: coins
+coins: coins,
+wallet: wallet
 });
 
 }
 
 
-// UPDATE COINS UI
-
+// COIN DISPLAY UPDATE
 function updateCoins(){
 
 document.getElementById("coins").innerText = coins;
 
-saveCoins();
+convertWallet();
+
+saveData();
+
+}
+
+
+// WALLET CONVERSION
+function convertWallet(){
+
+if(coins >= 100){
+
+let rupees = Math.floor(coins/100);
+
+wallet += rupees;
+
+coins = coins % 100;
+
+}
 
 }
 
 
 // SPIN FUNCTION
-
 window.spin = function(){
 
 if(coins < 10){
@@ -64,9 +96,15 @@ return;
 
 }
 
+spinBtn.disabled = true;
+
 coins -= 10;
 
 updateCoins();
+
+let sound = new Audio("spin_sound.mp3");
+
+sound.play();
 
 let rand = Math.floor(Math.random()*rewards.length);
 
@@ -82,40 +120,45 @@ coins += reward;
 
 updateCoins();
 
-showPopup("🎉 You won "+reward+" coins!");
+showPopup("🎉 +"+reward+" coins");
+
+spinBtn.disabled = false;
 
 },4000);
 
 }
 
 
-// SHOW POPUP
-
+// POPUP
 function showPopup(text){
 
 document.getElementById("resultText").innerText = text;
 
-document.getElementById("popup").style.display = "flex";
+document.getElementById("popup").style.display="flex";
+
+setTimeout(()=>{
+
+closePopup();
+
+},2000);
 
 }
 
 
 // CLOSE POPUP
-
 window.closePopup = function(){
 
-document.getElementById("popup").style.display = "none";
+document.getElementById("popup").style.display="none";
 
 }
 
 
 // DAILY BONUS
-
 window.dailyBonus = async function(){
 
 let today = new Date().toDateString();
 
-const userRef = doc(window.db,"users","testuser");
+const userRef = doc(db,"users",uid);
 
 const snap = await getDoc(userRef);
 
@@ -134,7 +177,6 @@ coins += 20;
 await updateDoc(userRef,{
 
 coins: coins,
-
 daily: today
 
 });
@@ -142,20 +184,5 @@ daily: today
 updateCoins();
 
 alert("🎁 Daily Bonus: 20 coins");
-
-}
-
-import { getAuth, signOut } 
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-const auth = getAuth();
-
-window.logout = function(){
-
-signOut(auth).then(()=>{
-
-window.location.href="login.html";
-
-});
 
 }
