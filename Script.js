@@ -15,7 +15,7 @@ let coins = 0;
 let wallet = 0;
 let uid = "";
 
-let rewards = [2,5,10,0,15,23];
+let rewards = [2,15,10,0,15,23];
 
 
 window.onload = ()=>{
