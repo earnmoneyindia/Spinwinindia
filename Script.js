@@ -117,6 +117,20 @@ ad.style.display = "none";
 
 callback(); // reward ఇవ్వు
 
+  // WATCH AD → GET 20 COINS
+window.watchAdCoins = function(){
+
+showAd(()=>{
+
+coins += 20;
+
+updateUI();
+
+showPopup("🎉 +20 coins (Ad reward)");
+
+});
+
+}
 }
 
 },1000);
