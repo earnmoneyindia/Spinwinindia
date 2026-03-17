@@ -6,7 +6,7 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import { db } from "./firebase.js";
 
-const auth = getAuth();
+import { auth } from "./firebase.js";
 
 let wheel;
 let spinBtn;
