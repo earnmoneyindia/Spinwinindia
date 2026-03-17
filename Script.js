@@ -15,7 +15,7 @@ let coins = 0;
 let wallet = 0;
 let uid = "";
 
-let rewards = [5,10,20,0,15,50];
+let rewards = [2,5,10,0,3,15];
 
 
 window.onload = ()=>{
@@ -130,7 +130,7 @@ window.spin = function(){
 
 if(coins < 10){
 
-showPopup("❌ Not enough coins");
+showPopup("❌ Not enough coins 🤡 Watch Ads To Get Coin");
 return;
 
 }
