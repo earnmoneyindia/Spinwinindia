@@ -130,7 +130,7 @@ window.spin = function(){
 
 if(coins < 10){
 
-showPopup("❌ Not enough coins 🤡 Watch Ads To Get Coin");
+showPopup("❌ సరిపడే coins లేవు, 🤡 Ads చూడండి 20 కాయిన్స్ వస్తాయి");
 return;
 
 }
