@@ -17,10 +17,9 @@ let uid = "";
 
 let rewards = [2,15,10,0,15,23];
 
-
 window.onload = ()=>{
-wheel = document.getElementById("wheel");
-spinBtn = document.getElementById("spinBtn");
+  wheel = document.getElementById("wheel");
+  spinBtn = document.getElementById("spinBtn");
 };
 
 
@@ -74,7 +73,7 @@ saveData();
 }
 
 
-// NEW CONVERSION LOGIC (120 → ₹1)
+// CONVERSION (120 → ₹1)
 function convertWallet(){
 
 if(coins >= 120){
@@ -90,7 +89,7 @@ coins = coins % 100;
 }
 
 
-// ====== AD SYSTEM ======
+// ================== AD SYSTEM ==================
 
 function showAd(callback){
 
@@ -99,7 +98,7 @@ let timer = document.getElementById("adTimer");
 
 ad.style.display = "flex";
 
-let time = 3; // 3 sec demo ad
+let time = 3;
 
 timer.innerText = "Ad ends in " + time + "s";
 
@@ -115,22 +114,8 @@ clearInterval(interval);
 
 ad.style.display = "none";
 
-callback(); // reward ఇవ్వు
+callback();
 
-  // WATCH AD → GET 20 COINS
-window.watchAdCoins = function(){
-
-showAd(()=>{
-
-coins += 20;
-
-updateUI();
-
-showPopup("🎉 +20 coins (Ad reward)");
-
-});
-
-}
 }
 
 },1000);
@@ -138,20 +123,61 @@ showPopup("🎉 +20 coins (Ad reward)");
 }
 
 
-// ===== SPIN =====
+// ================== STRONG COOLDOWN ==================
+
+function canWatchAd(){
+
+let last = localStorage.getItem("lastAdTime");
+let now = Date.now();
+
+if(last && (now - last < 10000)){
+return false;
+}
+
+localStorage.setItem("lastAdTime", now);
+return true;
+
+}
+
+
+// ================== WATCH AD COINS ==================
+
+window.watchAdCoins = function(){
+
+if(!canWatchAd()){
+showPopup("⏳ Wait few seconds...");
+return;
+}
+
+showAd(()=>{
+
+coins += 20;
+
+updateUI();
+
+showPopup("🎉 +20 coins");
+
+});
+
+}
+
+
+// ================== SPIN ==================
 
 window.spin = function(){
 
 if(coins < 10){
-
-showPopup("❌ సరిపడే coins లేవు, 🤡 Ads చూడండి 20 కాయిన్స్ వస్తాయి");
+showPopup("❌ Not enough coins. Watch ads!");
 return;
+}
 
+if(!canWatchAd()){
+showPopup("⏳ Wait before next spin...");
+return;
 }
 
 spinBtn.disabled = true;
 
-// 👉 FIRST AD SHOW
 showAd(()=>{
 
 coins -= 10;
@@ -183,7 +209,8 @@ spinBtn.disabled = false;
 };
 
 
-// POPUP
+// ================== POPUP ==================
+
 function showPopup(text){
 
 document.getElementById("resultText").innerText = text;
@@ -196,13 +223,13 @@ closePopup();
 
 }
 
-
 window.closePopup = function(){
 document.getElementById("popup").style.display="none";
 };
 
 
-// DAILY BONUS REMOVE (optional)
+// ================== DAILY ==================
+
 window.dailyBonus = function(){
 showPopup("📺 Watch ads to earn coins");
 };
