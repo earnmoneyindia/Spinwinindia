@@ -1,51 +1,111 @@
-import { db } from "./firebase.js";
-import { collection, getDocs, doc, updateDoc, deleteDoc } 
+import { getAuth, onAuthStateChanged } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import { collection, getDocs, updateDoc, doc, getDoc } 
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-let list = document.getElementById("list");
+import { db } from "./firebase.js";
 
-async function load(){
+const auth = getAuth();
 
-let snap = await getDocs(collection(db,"withdrawRequests"));
+// 🔐 CHANGE THIS TO YOUR EMAIL
+const adminEmail = "admin@earnmoneyindia.com";
 
-snap.forEach(docSnap=>{
+onAuthStateChanged(auth, async(user)=>{
 
-let d = docSnap.data();
+if(!user || user.email !== adminEmail){
+document.body.innerHTML = "❌ Access Denied";
+return;
+}
 
-let div = document.createElement("div");
-
-div.innerHTML = `
-<p>UID: ${d.uid}</p>
-<p>Amount: ₹${d.amount}</p>
-<p>UPI: ${d.upi}</p>
-
-<button onclick="approve('${docSnap.id}','${d.uid}',${d.amount})">Approve</button>
-<button onclick="reject('${docSnap.id}')">Reject</button>
-<hr>
-`;
-
-list.appendChild(div);
+loadRequests();
 
 });
+
+
+// LOAD REQUESTS
+async function loadRequests(){
+
+const snap = await getDocs(collection(db,"withdrawals"));
+
+let html = "";
+
+snap.forEach((d)=>{
+
+let data = d.data();
+
+html += `
+<div style="border:1px solid #ccc;padding:10px;margin:10px">
+
+<b>${data.name || "User"}</b><br>
+Amount : ₹${data.amount}<br>
+UPI : ${data.upi}<br>
+Status : ${data.status}<br><br>
+
+<button onclick="approve('${d.id}')">✅ Approve</button>
+<button onclick="reject('${d.id}')">❌ Reject</button>
+<button onclick="paid('${d.id}')">💰 Mark Paid</button>
+
+</div>
+`;
+
+});
+
+document.getElementById("requests").innerHTML = html;
 
 }
 
-window.approve = async function(id, uid, amount){
 
-alert("💰 Send money manually via UPI");
+// APPROVE
+window.approve = async function(id){
 
-await updateDoc(doc(db,"withdrawRequests",id),{
+await updateDoc(doc(db,"withdrawals",id),{
 status:"approved"
 });
 
-};
+alert("Approved");
+location.reload();
 
+}
+
+
+// REJECT + REFUND
 window.reject = async function(id){
 
-await deleteDoc(doc(db,"withdrawRequests",id));
+const ref = doc(db,"withdrawals",id);
+const snap = await getDoc(ref);
 
-alert("❌ Rejected");
+let data = snap.data();
 
-};
+// refund wallet
+const userRef = doc(db,"users",data.uid);
+const userSnap = await getDoc(userRef);
 
-load();
+let currentWallet = userSnap.data().wallet || 0;
+
+await updateDoc(userRef,{
+wallet: currentWallet + data.amount
+});
+
+// update status
+await updateDoc(ref,{
+status:"rejected"
+});
+
+alert("Rejected & Refunded");
+location.reload();
+
+}
+
+
+// MARK PAID
+window.paid = async function(id){
+
+await updateDoc(doc(db,"withdrawals",id),{
+status:"paid"
+});
+
+alert("Marked as Paid");
+location.reload();
+
+}
