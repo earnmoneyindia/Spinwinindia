@@ -1,37 +1,114 @@
-body{
-  text-align:center;
-  font-family:Arial;
-  background:#111;
-  color:white;
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(180deg, #0f172a, #1e293b);
+  color: white;
+  text-align: center;
 }
 
-#wheel{
-  margin:20px auto;
-  width:150px;
-  height:150px;
-  border-radius:50%;
-  background:linear-gradient(45deg,red,yellow,green);
-  display:flex;
-  align-items:center;
-  justify-content:center;
+/* HEADER */
+header {
+  padding: 15px;
 }
 
-button{
-  padding:10px 20px;
-  font-size:16px;
-  margin:10px;
-  border:none;
-  border-radius:8px;
-  background:#ff9800;
-  color:white;
+h1 {
+  font-size: 28px;
+  color: #facc15;
 }
 
-#bottomAd{
-  position:fixed;
-  bottom:0;
+p {
+  color: #cbd5f5;
+}
+
+/* GLASS CARD */
+.card {
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(10px);
+  margin: 15px;
+  padding: 15px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+/* WALLET TEXT */
+#wallet, #coins {
+  font-size: 20px;
+  color: #facc15;
+  font-weight: bold;
+}
+
+/* WHEEL */
+#wheel {
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  border: 6px solid #facc15;
+  margin: 20px auto;
+  box-shadow: 0 0 25px rgba(250,204,21,0.6);
+}
+
+/* BUTTON */
+button {
+  background: linear-gradient(135deg, #facc15, #f97316);
+  border: none;
+  border-radius: 12px;
+  padding: 14px 22px;
+  color: black;
+  font-weight: bold;
+  font-size: 16px;
+  margin: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  transition: 0.2s;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+/* SECONDARY BUTTON */
+.secondary {
+  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+  color: white;
+}
+
+/* AD BUTTON */
+#adBtn {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+/* LIMIT TEXT */
+#limitInfo {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+/* POPUP */
+#popup {
+  position: fixed;
+  top:0;
+  left:0;
   width:100%;
-  height:50px;
-  background:black;
-  display:flex;
+  height:100%;
+  display:none;
   justify-content:center;
+  align-items:center;
+  background: rgba(0,0,0,0.7);
+}
+
+#popupContent {
+  background:#1e293b;
+  padding:20px;
+  border-radius:12px;
+  color:#fff;
+  font-size:18px;
+}
+
+/* BANNER AD */
+#bannerAd {
+  margin: 15px;
+}
+
+/* FOOTER SPACE */
+.spacer {
+  height: 20px;
 }
