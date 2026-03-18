@@ -1,7 +1,7 @@
 body{
 margin:0;
-font-family:Arial;
-background: radial-gradient(circle,#0a1f44,#000);
+font-family:Arial, sans-serif;
+background: url("medha.png") no-repeat center center/cover;
 color:white;
 text-align:center;
 }
@@ -23,11 +23,12 @@ width:220px;
 position:absolute;
 right:10px;
 top:10px;
-background:green;
+background:linear-gradient(#00cc44,#009933);
 color:white;
 border:none;
 padding:8px 15px;
-border-radius:8px;
+border-radius:10px;
+box-shadow:0 0 10px #00ff88;
 }
 
 /* BALANCE */
@@ -40,67 +41,64 @@ margin:10px;
 .coins-box{
 background:#0b3c6f;
 padding:10px 20px;
-border-radius:10px;
+border-radius:12px;
 border:2px solid #00c3ff;
+box-shadow:0 0 10px #00c3ff;
 }
 
 .wallet-box{
 background:#3b1f00;
 padding:10px 20px;
-border-radius:10px;
+border-radius:12px;
 border:2px solid gold;
+box-shadow:0 0 10px gold;
 }
 
 /* POINTER */
 .pointer{
-font-size:30px;
+font-size:34px;
 color:orange;
 margin-top:5px;
+position:relative;
+top:10px;
 }
 
 /* WHEEL */
 #wheel{
-width:300px;
-height:300px;
+width:320px;
+height:320px;
 border-radius:50%;
 margin:10px auto;
-border:6px solid gold;
-box-shadow:0 0 30px gold;
-  transition: transform 3s ease-out;
+border:8px solid gold;
+box-shadow:0 0 40px gold;
+transition: transform 3s ease-out;
+background:rgba(0,0,0,0.2);
 }
 
 /* BUTTONS */
 button{
-width:80%;
+width:85%;
 margin:10px;
-padding:12px;
+padding:14px;
 border:none;
-border-radius:10px;
-font-size:16px;
+border-radius:12px;
+font-size:17px;
 font-weight:bold;
+color:white;
+box-shadow:0 0 12px rgba(255,255,255,0.3);
 }
 
 .spin-btn{
 background:linear-gradient(#1e90ff,#003cff);
-color:white;
+box-shadow:0 0 15px #1e90ff;
 }
 
 .bonus-btn{
 background:linear-gradient(#ff9900,#ff6600);
+box-shadow:0 0 15px orange;
 }
 
 .ad-btn{
 background:linear-gradient(#ff4500,#cc0000);
-}
-
-.withdraw-btn{
-background:linear-gradient(#00cc44,#009933);
-}
-
-/* BANNER */
-.banner{
-margin-top:20px;
-padding:10px;
-background:#111;
-border-top:2px solid gold;
+box-shadow:0 0 15px red;
 }
