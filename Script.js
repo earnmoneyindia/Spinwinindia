@@ -1,138 +1,113 @@
-import { auth, db } from "./firebase.js";
-import { doc, getDoc, updateDoc } 
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { onAuthStateChanged, signOut } 
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-let coins = 0;
+let coins = 100;
 let wallet = 0;
-let uid = "";
 
-let rewards = [5,10,20,0,15,50];
+let spinCount = 0;
+let totalSpins = 0;
 
-// LOAD USER
-onAuthStateChanged(auth, async(user)=>{
+const rewardsDefault = [5,10,0,20,15,9,0,12,15,25,11,30];
 
-if(!user){
-window.location.href="login.html";
-return;
-}
-
-uid = user.uid;
-
-const snap = await getDoc(doc(db,"users",uid));
-
-if(snap.exists()){
-coins = snap.data().coins || 0;
-wallet = snap.data().wallet || 0;
-}
-
-updateUI();
-
-});
-
-// UPDATE UI
 function updateUI(){
-document.getElementById("coins").innerText = coins;
-document.getElementById("wallet").innerText = wallet;
+document.getElementById("userInfo").innerHTML =
+"Coins: "+coins+" | Wallet: ₹"+wallet;
 }
 
-// SAVE
-async function save(){
-await updateDoc(doc(db,"users",uid),{
-coins: coins,
-wallet: wallet
-});
+function getRewards(){
+
+if(wallet <=100 && coins <=50){
+return [35,15,0,20,25,50,0,10,5,8,10,30];
 }
 
-// SPIN
-window.spin = function(){
+else if(wallet >=500){
+return [5,10,0,22,15,19,0,10,7,20,0,32];
+}
+
+return rewardsDefault;
+}
+
+function spin(){
 
 if(coins < 10){
-alert("Not enough coins!");
+alert("Not enough coins");
 return;
 }
 
-coins -= 10;
-updateUI();
+coins -=10;
 
-let wheel = document.getElementById("wheel");
+spinCount++;
+totalSpins++;
 
+let rewards = getRewards();
 let rand = Math.floor(Math.random()*rewards.length);
-let deg = 720 + rand*60;
-
-wheel.style.transform = "rotate("+deg+"deg)";
-
-setTimeout(()=>{
-
 let reward = rewards[rand];
 
+// 🎯 Ad every 10 spins
+if(spinCount % 10 === 0){
+showAd(()=>{
 coins += reward;
+finishSpin(reward);
+});
+}else{
+coins += reward;
+finishSpin(reward);
+}
+
+}
+
+function finishSpin(reward){
 
 // wallet convert
-if(coins >= 100){
-wallet += Math.floor(coins/100);
-coins = coins % 100;
+if(coins >=120){
+coins -=100;
+wallet +=1;
 }
+
+document.getElementById("result").innerText =
+"You won "+reward+" coins";
+
+playWin();
 
 updateUI();
-save();
-
-showPopup("🎉 You got "+reward+" coins");
-
-},3000);
-
 }
 
-// POPUP
-function showPopup(text){
-let p = document.getElementById("popup");
-p.innerText = text;
-p.style.display="block";
-
-setTimeout(()=>p.style.display="none",2000);
-}
-
-// DAILY BONUS
-window.dailyBonus = function(){
-coins += 20;
+function dailyBonus(){
+showAd(()=>{
+coins +=20;
 updateUI();
-save();
-alert("🎁 +20 coins");
+alert("20 coins added");
+});
 }
 
-// WATCH AD
-window.watchAdCoins = function(){
+// Fake Ad
+function showAd(callback){
 
 let ad = document.createElement("div");
-ad.innerHTML="📺 Watching Ad...";
-ad.style = `
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:black;
-color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:24px;
-`;
+
+ad.style.position="fixed";
+ad.style.top=0;
+ad.style.left=0;
+ad.style.width="100%";
+ad.style.height="100%";
+ad.style.background="black";
+ad.style.color="white";
+ad.style.display="flex";
+ad.style.justifyContent="center";
+ad.style.alignItems="center";
+
+ad.innerHTML="📺 Ad Playing...";
 
 document.body.appendChild(ad);
 
 setTimeout(()=>{
 document.body.removeChild(ad);
-coins += 20;
-updateUI();
-save();
+callback();
 },3000);
 
 }
 
-// LOGOUT
-window.logout = function(){
-signOut(auth);
-window.location.href="login.html";
+// sounds
+function playWin(){
+let audio = new Audio("sounds/win.mp3");
+audio.play();
 }
+
+updateUI();
