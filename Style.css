@@ -5,19 +5,51 @@ background:#111;
 color:white;
 }
 
+/* WHEEL */
 #wheel{
 width:250px;
 height:250px;
 margin:20px auto;
 border-radius:50%;
-border:4px solid gold;
+border:6px solid gold;
+background: conic-gradient(
+red 0deg 60deg,
+blue 60deg 120deg,
+green 120deg 180deg,
+yellow 180deg 240deg,
+purple 240deg 300deg,
+orange 300deg 360deg
+);
+
+/* rotation */
+transition: transform 3s ease-out;
 }
 
+/* POINTER */
+.pointer{
+font-size:30px;
+color:orange;
+}
+
+/* BUTTON */
 button{
-padding:10px;
+padding:10px 15px;
 margin:8px;
 border:none;
-border-radius:6px;
+border-radius:8px;
 background:#00c853;
 color:white;
+font-weight:bold;
+}
+
+/* POPUP */
+#popup{
+position:fixed;
+top:40%;
+left:50%;
+transform:translate(-50%,-50%);
+background:#000;
+padding:20px;
+display:none;
+border:2px solid gold;
 }
