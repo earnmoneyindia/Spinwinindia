@@ -1,48 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Spin Win India</title>
-<link rel="stylesheet" href="Style.css">
+  <title>Spin Win India</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<h2>🎡 Spin & Win India</h2>
+<h2>🎯 Spin Win India</h2>
 
-<div>
-🪙 Coins: <span id="coins">0</span> |
-💰 Wallet: ₹<span id="wallet">0</span>
-</div>
+<div id="userInfo"></div>
 
-<br>
+<div id="wheel">🎡</div>
 
-<div class="pointer">🔻</div>
-
-<div id="wheel"></div>
-
-<br>
-
-<button onclick="spin()">🎯 SPIN (10 Coins)</button>
-
-<br>
-
-<button onclick="dailyBonus()">🎁 Daily Bonus</button>
-
-<button onclick="watchAdCoins()">📺 Watch Ad (+20)</button>
-
-<br>
-
-<button onclick="logout()">🚪 Logout</button>
+<button id="spinBtn" onclick="spin()">🎯 SPIN</button>
 
 <br><br>
 
-<a href="withdraw.html">
-<button>💸 Withdraw</button>
-</a>
+<button onclick="dailyBonus()">🎁 Claim 20 Coins (Ad)</button>
 
-<div id="popup"></div>
+<div id="result"></div>
 
-<script type="module" src="Script.js"></script>
+<!-- Bottom Ad -->
+<div id="bottomAd">
+  <img src="https://via.placeholder.com/320x50?text=Ad+Banner">
+</div>
+
+<script type="module" src="firebase.js"></script>
+<script type="module" src="auth.js"></script>
+<script src="script.js"></script>
 
 </body>
 </html>
