@@ -1,1 +1,25 @@
-withdraw
+<!DOCTYPE html>
+<html>
+<head>
+<title>Withdraw</title>
+<link rel="stylesheet" href="Style.css">
+</head>
+
+<body>
+
+<h2>💸 Withdraw Money</h2>
+
+<p>Wallet: ₹<span id="wallet">0</span></p>
+
+<input type="number" id="amount" placeholder="Enter amount">
+
+<input type="text" id="upi" placeholder="Enter UPI ID">
+
+<button onclick="requestWithdraw()">Withdraw</button>
+
+<p id="msg"></p>
+
+<script type="module" src="withdraw.js"></script>
+
+</body>
+</html>
