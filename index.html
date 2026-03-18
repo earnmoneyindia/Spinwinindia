@@ -7,6 +7,7 @@
 
 <body>
 
+<!-- 🔝 TOP BAR -->
 <div class="topbar">
 <div class="card">🪙 Coins: <span id="coins">0</span></div>
 <div class="card">💰 ₹<span id="wallet">0</span></div>
@@ -14,6 +15,7 @@
 
 <h2>🎡 Spin & Win</h2>
 
+<!-- 🎡 WHEEL -->
 <canvas id="wheel"></canvas>
 
 <br>
@@ -32,38 +34,15 @@
 <button class="withdraw-btn">💸 Withdraw</button>
 </a>
 
+<!-- 🎉 POPUP -->
 <div id="popup"></div>
 
-<!-- 📺 Sticky Ad -->
+<!-- 📺 BANNER -->
 <div class="banner-ad">
-📢 Your Ad Banner Here
-</div>
-<header>
-<img src="Swilogo.png" width="150">
-<h2>Spin & Win</h2>
-<button onclick="logout()">Logout</button>
-</header>
-
-<div class="balance">
-Coins: <span id="coins">0</span> |
-Wallet: ₹<span id="wallet">0</span>
+📢 Ad Banner
 </div>
 
-<div class="wheel-box">
-<div id="wheel"></div>
-<button id="spinBtn" onclick="spin()">🎯 SPIN</button>
-</div>
-
-<div class="menu">
-<button onclick="dailyBonus()">🎁 Claim 20 Coins</button>
-<button onclick="watchAdCoins()">📺 Watch Ad +20</button>
-<button onclick="window.location.href='wallet.html'">💰 Wallet</button>
-</div>
-
-<div id="popup" class="popup"></div>
-
-<div id="bottomAd">📺 Ad Banner</div>
-
+<!-- Scripts -->
 <script type="module" src="firebase.js"></script>
 <script type="module" src="auth.js"></script>
 <script type="module" src="Script.js"></script>
