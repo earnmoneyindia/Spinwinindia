@@ -7,46 +7,28 @@
 
 <body>
 
-<div class="app">
+<h2>🎡 Spin & Win India</h2>
 
-<!-- 🔝 HEADER -->
-<div class="header">
-<img src="Swilogo.png" class="logo">
-<button class="logout-btn" onclick="logout()">Logout</button>
-</div>
+<p>🪙 Coins: <span id="coins">0</span></p>
+<p>💰 Wallet: ₹<span id="wallet">0</span></p>
 
-<!-- 💰 BALANCE -->
-<div class="balance-bar">
-<div class="coins-box">🪙 <span id="coins">0</span></div>
-<div class="wallet-box">₹ <span id="wallet">0</span></div>
-</div>
-
-<!-- 🔻 POINTER -->
-<div class="pointer">🔻</div>
-
-<!-- 🎡 WHEEL -->
 <canvas id="wheel"></canvas>
 
-<!-- 🎯 SPIN -->
-<button class="spin-btn" onclick="spin()">🎯 Spin</button>
+<br>
 
-<!-- 🎁 BONUS -->
-<button class="bonus-btn" onclick="dailyBonus()">🎁 Daily Bonus</button>
+<button onclick="spin()">🎯 Spin</button>
 
-<!-- 📺 AD -->
-<button class="ad-btn" onclick="watchAdCoins()">📺 Watch Ad</button>
+<button onclick="watchAdCoins()">📺 Watch Ad</button>
 
-<!-- 💸 WITHDRAW -->
+<button onclick="dailyBonus()">🎁 Daily Bonus</button>
+
+<button onclick="logout()">🚪 Logout</button>
+
+<br><br>
+
 <a href="withdraw.html">
-<button class="withdraw-btn">💸 Withdraw</button>
+<button>💸 Withdraw</button>
 </a>
-
-</div>
-
-<!-- 📺 BOTTOM BANNER -->
-<div class="banner">
-📢 Ad Banner Space
-</div>
 
 <script type="module" src="Script.js"></script>
 
