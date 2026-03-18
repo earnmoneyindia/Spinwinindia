@@ -65,7 +65,8 @@ height:300px;
 border-radius:50%;
 margin:10px auto;
 border:6px solid gold;
-box-shadow:0 0 20px gold;
+box-shadow:0 0 30px gold;
+  transition: transform 3s ease-out;
 }
 
 /* BUTTONS */
