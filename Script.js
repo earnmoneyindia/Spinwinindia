@@ -75,8 +75,8 @@ function drawWheel(){
 const canvas = document.getElementById("wheel");
 const ctx = canvas.getContext("2d");
 
-canvas.width = 260;
-canvas.height = 260;
+canvas.width = 300;
+canvas.height = 300;
 
 let rewards = getRewards();
 let angle = (2*Math.PI)/rewards.length;
@@ -84,25 +84,25 @@ let angle = (2*Math.PI)/rewards.length;
 for(let i=0;i<rewards.length;i++){
 
 ctx.beginPath();
-ctx.moveTo(130,130);
+ctx.moveTo(150,150);
 
-ctx.fillStyle = i%2==0 ? "#06b6d4" : "#0ea5e9";
+ctx.fillStyle = i%2==0 ? "#0ea5e9" : "#0284c7";
 
-ctx.arc(130,130,130,i*angle,(i+1)*angle);
+ctx.arc(150,150,150,i*angle,(i+1)*angle);
 ctx.fill();
 
+// TEXT (EDGE + GOLD)
 ctx.save();
-ctx.translate(130,130);
+ctx.translate(150,150);
 ctx.rotate(i*angle + angle/2);
 
-ctx.fillStyle = "white";
-ctx.font = "bold 14px Arial";
-ctx.fillText(rewards[i],50,5);
+ctx.fillStyle = "gold";
+ctx.font = "bold 18px Arial";
+ctx.fillText(rewards[i],90,5);
 
 ctx.restore();
 }
 }
-
 
 // ============================
 // 🎡 REWARDS
