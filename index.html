@@ -9,18 +9,28 @@
 
 <h2>🎡 Spin & Win India</h2>
 
-<p>🪙 Coins: <span id="coins">0</span></p>
-<p>💰 Wallet: ₹<span id="wallet">0</span></p>
-
-<canvas id="wheel"></canvas>
+<div>
+🪙 Coins: <span id="coins">0</span> |
+💰 Wallet: ₹<span id="wallet">0</span>
+</div>
 
 <br>
 
-<button onclick="spin()">🎯 Spin</button>
+<div class="pointer">🔻</div>
 
-<button onclick="watchAdCoins()">📺 Watch Ad</button>
+<div id="wheel"></div>
+
+<br>
+
+<button onclick="spin()">🎯 SPIN (10 Coins)</button>
+
+<br>
 
 <button onclick="dailyBonus()">🎁 Daily Bonus</button>
+
+<button onclick="watchAdCoins()">📺 Watch Ad (+20)</button>
+
+<br>
 
 <button onclick="logout()">🚪 Logout</button>
 
@@ -29,6 +39,8 @@
 <a href="withdraw.html">
 <button>💸 Withdraw</button>
 </a>
+
+<div id="popup"></div>
 
 <script type="module" src="Script.js"></script>
 
