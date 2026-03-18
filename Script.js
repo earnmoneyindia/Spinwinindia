@@ -56,6 +56,75 @@ document.getElementById("coins").innerText = coins;
 document.getElementById("wallet").innerText = wallet;
 }
 
+function drawWheel(){
+
+const canvas = document.getElementById("wheel");
+const ctx = canvas.getContext("2d");
+
+canvas.width = 260;
+canvas.height = 260;
+
+let rewards = getRewards();
+let angle = (2*Math.PI)/rewards.length;
+
+for(let i=0;i<rewards.length;i++){
+
+ctx.beginPath();
+ctx.moveTo(130,130);
+
+ctx.fillStyle = i%2==0 ? "#06b6d4" : "#0ea5e9";
+
+ctx.arc(130,130,130,i*angle,(i+1)*angle);
+ctx.fill();
+
+ctx.save();
+ctx.translate(130,130);
+ctx.rotate(i*angle + angle/2);
+
+ctx.fillStyle = "white";
+ctx.font = "bold 14px Arial";
+ctx.fillText(rewards[i],50,5);
+
+ctx.restore();
+}
+}
+
+drawWheel();
+
+function confetti(){
+
+for(let i=0;i<30;i++){
+let div = document.createElement("div");
+
+div.style.position="fixed";
+div.style.width="6px";
+div.style.height="6px";
+div.style.background="cyan";
+div.style.top=Math.random()*window.innerHeight+"px";
+div.style.left=Math.random()*window.innerWidth+"px";
+
+document.body.appendChild(div);
+
+setTimeout(()=>div.remove(),1000);
+}
+}
+
+confetti();
+
+let spinSound = new Audio("sounds/spin.mp3");
+let winSound = new Audio("sounds/win.mp3");
+
+function playSpin(){
+spinSound.play();
+}
+
+function playWin(){
+winSound.play();
+}
+
+playSpin();
+// after result
+playWin();
 
 // ============================
 // 🎡 DYNAMIC REWARD SYSTEM
