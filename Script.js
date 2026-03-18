@@ -4,7 +4,6 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { onAuthStateChanged } 
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { auth } from "./firebase.js";
 
 window.logout = function(){
 signOut(auth);
@@ -70,40 +69,61 @@ document.getElementById("wallet").innerText = wallet;
 // ============================
 // 🎡 DRAW WHEEL
 // ============================
+
 function drawWheel(){
 
 const canvas = document.getElementById("wheel");
 const ctx = canvas.getContext("2d");
 
-canvas.width = 300;
-canvas.height = 300;
+canvas.width = 320;
+canvas.height = 320;
 
 let rewards = getRewards();
 let angle = (2*Math.PI)/rewards.length;
 
+// 🔥 OUTER GLOW
+ctx.shadowBlur = 20;
+ctx.shadowColor = "gold";
+
 for(let i=0;i<rewards.length;i++){
 
 ctx.beginPath();
-ctx.moveTo(150,150);
+ctx.moveTo(160,160);
 
-ctx.fillStyle = i%2==0 ? "#0ea5e9" : "#0284c7";
+// gradient colors (premium look)
+let grad = ctx.createLinearGradient(0,0,320,320);
+grad.addColorStop(0, i%2==0 ? "#1e3a8a" : "#0ea5e9");
+grad.addColorStop(1, "#38bdf8");
 
-ctx.arc(150,150,150,i*angle,(i+1)*angle);
+ctx.fillStyle = grad;
+
+ctx.arc(160,160,150,i*angle,(i+1)*angle);
 ctx.fill();
 
-// TEXT (EDGE + GOLD)
+// TEXT
 ctx.save();
-ctx.translate(150,150);
+ctx.translate(160,160);
 ctx.rotate(i*angle + angle/2);
 
 ctx.fillStyle = "gold";
-ctx.font = "bold 18px Arial";
-ctx.fillText(rewards[i],90,5);
+ctx.font = "bold 20px Arial";
+ctx.fillText(rewards[i],100,5);
 
 ctx.restore();
 }
-}
 
+// 🔥 CENTER CIRCLE
+ctx.beginPath();
+ctx.arc(160,160,50,0,2*Math.PI);
+ctx.fillStyle = "#0f172a";
+ctx.fill();
+
+ctx.fillStyle = "white";
+ctx.font = "bold 18px Arial";
+ctx.fillText("SPIN",130,165);
+
+}
+  
 // ============================
 // 🎡 REWARDS
 // ============================
@@ -119,16 +139,16 @@ return [5,10,8,20,15,9,0,12,15,25,11,30];
 
 }
 
-
 // ============================
 // 🎯 SPIN
 // ============================
+
 window.spin = async function(){
 
 let now = Date.now();
 
 if(now - lastSpinTime < SPIN_COOLDOWN){
-alert("⏳ Wait before spinning again!");
+alert("⏳ Wait!");
 return;
 }
 
@@ -139,10 +159,18 @@ return;
 
 lastSpinTime = now;
 
+coins -= 10;
+updateUI();
+
 spinSound.play();
 
-// deduct
-coins -= 10;
+let wheel = document.getElementById("wheel");
+
+// 🎡 RANDOM ROTATION
+let deg = 360 * 5 + Math.floor(Math.random()*360);
+
+wheel.style.transition = "transform 3s ease-out";
+wheel.style.transform = "rotate("+deg+"deg)";
 
 let rewards = getRewards();
 let reward = rewards[Math.floor(Math.random()*rewards.length)];
@@ -151,36 +179,26 @@ setTimeout(async ()=>{
 
 coins += reward;
 
-// 💰 wallet conversion
-let currentHour = new Date().getHours();
-
-if(currentHour !== lastWalletHour){
-earnedThisHour = 0;
-lastWalletHour = currentHour;
-}
-
-if(coins >= 120 && earnedThisHour < HOURLY_LIMIT){
+// 💰 conversion
+if(coins >= 120){
 coins -= 100;
 wallet += 1;
-earnedThisHour++;
 }
 
 // save
 await updateDoc(doc(db,"users",uid),{
-coins: coins,
-wallet: wallet
+coins, wallet
 });
 
 winSound.play();
 confetti();
 
-showPopup("🎉 You won " + reward);
+showPopup("🎉 "+reward+" coins");
 updateUI();
 
-},2000);
+},3000);
 
 }
-
 
 // ============================
 // 🎁 ADS
