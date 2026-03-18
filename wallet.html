@@ -1,42 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Wallet - Earn Money India</title>
+<title>Wallet</title>
 <link rel="stylesheet" href="Style.css">
-
 </head>
 
 <body>
 
-<header>
-<img src="Swilogo.png" width="200">
 <h2>Wallet</h2>
-</header>
 
-<div class="wallet-box">
-<h3>Balance : ₹<span id="walletBalance">0</span></h3>
-<p>Minimum Withdraw : ₹200</p>
-</div>
+Balance: ₹<span id="wallet">0</span>
 
-<div class="withdraw-box">
-<input type="text" id="upi" placeholder="Enter UPI ID">
-<button onclick="withdraw()">Request ₹200 Withdrawal</button>
-</div>
+<input id="amount" placeholder="Amount">
+<input id="upi" placeholder="UPI ID">
 
-<div class="history">
-<h3>Withdrawal History</h3>
-<div id="historyList">Loading...</div>
-</div>
+<button onclick="withdraw()">Withdraw</button>
 
-<button onclick="window.location.href='index.html'">
-⬅ Back to Game
-</button>
-
-<script type="module" src="firebase.js"></script>
 <script type="module" src="wallet.js"></script>
 
 </body>
