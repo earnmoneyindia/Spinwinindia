@@ -1,20 +1,20 @@
 import { auth, db } from "./firebase.js";
 import { doc, getDoc, updateDoc } 
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { onAuthStateChanged } 
+import { onAuthStateChanged, signOut } 
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
+// LOGOUT
 window.logout = function(){
 signOut(auth);
 window.location.href="login.html";
 }
 
+// VARIABLES
 let coins = 0;
 let wallet = 0;
 let uid = "";
 
-// 🔐 Controls
 let lastSpinTime = 0;
 const SPIN_COOLDOWN = 5000;
 
@@ -22,19 +22,11 @@ let adCooldown = 0;
 let dailyAdCount = 0;
 let lastAdDate = "";
 
-let lastWalletHour = new Date().getHours();
-let earnedThisHour = 0;
-const HOURLY_LIMIT = 200;
-
-
-// 🔊 Sounds
+// SOUND
 let spinSound = new Audio("sounds/spin.mp3");
 let winSound = new Audio("sounds/win.mp3");
 
-
-// ============================
-// 👤 LOAD USER
-// ============================
+// LOAD USER
 onAuthStateChanged(auth, async(user)=>{
 
 if(!user){
@@ -56,20 +48,13 @@ drawWheel();
 
 });
 
-
-// ============================
-// 🎯 UI UPDATE
-// ============================
+// UI UPDATE
 function updateUI(){
 document.getElementById("coins").innerText = coins;
 document.getElementById("wallet").innerText = wallet;
 }
 
-
-// ============================
-// 🎡 DRAW WHEEL
-// ============================
-
+// DRAW WHEEL
 function drawWheel(){
 
 const canvas = document.getElementById("wheel");
@@ -81,7 +66,6 @@ canvas.height = 320;
 let rewards = getRewards();
 let angle = (2*Math.PI)/rewards.length;
 
-// 🔥 OUTER GLOW
 ctx.shadowBlur = 20;
 ctx.shadowColor = "gold";
 
@@ -90,7 +74,6 @@ for(let i=0;i<rewards.length;i++){
 ctx.beginPath();
 ctx.moveTo(160,160);
 
-// gradient colors (premium look)
 let grad = ctx.createLinearGradient(0,0,320,320);
 grad.addColorStop(0, i%2==0 ? "#1e3a8a" : "#0ea5e9");
 grad.addColorStop(1, "#38bdf8");
@@ -100,19 +83,20 @@ ctx.fillStyle = grad;
 ctx.arc(160,160,150,i*angle,(i+1)*angle);
 ctx.fill();
 
-// TEXT
 ctx.save();
 ctx.translate(160,160);
 ctx.rotate(i*angle + angle/2);
 
 ctx.fillStyle = "gold";
 ctx.font = "bold 20px Arial";
-ctx.fillText(rewards[i],100,5);
+ctx.shadowBlur = 5;
+ctx.shadowColor = "gold";
+ctx.fillText(rewards[i],115,5);
 
 ctx.restore();
 }
 
-// 🔥 CENTER CIRCLE
+// CENTER
 ctx.beginPath();
 ctx.arc(160,160,50,0,2*Math.PI);
 ctx.fillStyle = "#0f172a";
@@ -120,13 +104,11 @@ ctx.fill();
 
 ctx.fillStyle = "white";
 ctx.font = "bold 18px Arial";
-ctx.fillText("SPIN",130,165);
+ctx.fillText("SPIN",125,165);
 
 }
-  
-// ============================
-// 🎡 REWARDS
-// ============================
+
+// REWARDS
 function getRewards(){
 
 if(wallet <= 100 && coins <= 50){
@@ -139,10 +121,7 @@ return [5,10,8,20,15,9,0,12,15,25,11,30];
 
 }
 
-// ============================
-// 🎯 SPIN
-// ============================
-
+// SPIN
 window.spin = async function(){
 
 let now = Date.now();
@@ -166,11 +145,11 @@ spinSound.play();
 
 let wheel = document.getElementById("wheel");
 
-// 🎡 RANDOM ROTATION
 let deg = 360 * 5 + Math.floor(Math.random()*360);
 
 wheel.style.transition = "transform 3s ease-out";
 wheel.style.transform = "rotate("+deg+"deg)";
+wheel.style.transformOrigin = "center";
 
 let rewards = getRewards();
 let reward = rewards[Math.floor(Math.random()*rewards.length)];
@@ -179,13 +158,11 @@ setTimeout(async ()=>{
 
 coins += reward;
 
-// 💰 conversion
 if(coins >= 120){
 coins -= 100;
 wallet += 1;
 }
 
-// save
 await updateDoc(doc(db,"users",uid),{
 coins, wallet
 });
@@ -200,9 +177,7 @@ updateUI();
 
 }
 
-// ============================
-// 🎁 ADS
-// ============================
+// WATCH AD
 window.watchAdCoins = function(){
 
 showAd(()=>{
@@ -212,10 +187,7 @@ saveAndUpdate();
 
 }
 
-
-// ============================
-// 💾 SAVE
-// ============================
+// SAVE
 async function saveAndUpdate(){
 await updateDoc(doc(db,"users",uid),{
 coins: coins,
@@ -224,21 +196,15 @@ wallet: wallet
 updateUI();
 }
 
-
-// ============================
-// 🎉 POPUP
-// ============================
+// POPUP
 function showPopup(text){
 let p = document.getElementById("popup");
-p.innerText = text;
+p.innerHTML = "<h2>"+text+"</h2>";
 p.style.display="block";
 setTimeout(()=>p.style.display="none",2000);
 }
 
-
-// ============================
-// 📺 AD SYSTEM
-// ============================
+// AD SYSTEM
 function showAd(callback){
 
 let today = new Date().toDateString();
@@ -281,6 +247,7 @@ display:flex;
 justify-content:center;
 align-items:center;
 font-size:24px;
+z-index:999;
 `;
 
 document.body.appendChild(ad);
@@ -292,10 +259,7 @@ callback();
 
 }
 
-
-// ============================
-// 🎉 CONFETTI
-// ============================
+// CONFETTI
 function confetti(){
 
 for(let i=0;i<25;i++){
@@ -304,7 +268,7 @@ let div = document.createElement("div");
 div.style.position="fixed";
 div.style.width="6px";
 div.style.height="6px";
-div.style.background="cyan";
+div.style.background="gold";
 div.style.top=Math.random()*window.innerHeight+"px";
 div.style.left=Math.random()*window.innerWidth+"px";
 
