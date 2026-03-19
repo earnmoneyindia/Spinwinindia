@@ -6,7 +6,7 @@ color:white;
 margin:0;
 }
 
-/* LOGO TOP LEFT */
+/* LOGO */
 .logo{
 position:absolute;
 top:10px;
@@ -14,7 +14,7 @@ left:10px;
 width:60px;
 }
 
-/* LOGOUT BUTTON TOP RIGHT */
+/* LOGOUT */
 .logout{
 position:absolute;
 top:10px;
@@ -37,7 +37,7 @@ color:#ffcc00;
 margin:5px;
 }
 
-/* MAIN CONTAINER */
+/* CONTAINER */
 .container{
 margin-top:20px;
 }
@@ -57,16 +57,14 @@ background:conic-gradient(
 #9c27b0 240deg 300deg,
 #00bcd4 300deg 360deg
 );
-transition:transform 4s ease-out;
 }
 
 /* POINTER */
 .pointer{
 font-size:30px;
-margin-top:10px;
 }
 
-/* BUTTONS FIXED SIZE */
+/* BUTTON */
 button{
 padding:10px 20px;
 font-size:16px;
@@ -76,14 +74,13 @@ border-radius:8px;
 color:white;
 cursor:pointer;
 margin:8px;
-width:auto; /* FIX: no full width */
 }
 
 button:hover{
 background:#ff5722;
 }
 
-/* COINS DISPLAY */
+/* COINS */
 .coins{
 font-size:18px;
 margin-top:10px;
