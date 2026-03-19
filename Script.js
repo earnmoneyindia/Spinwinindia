@@ -7,7 +7,8 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { db } from "./firebase.js";
 
 const auth = getAuth();
-
+const data = snap.data() || {};
+let last = data.daily;
 let wheel;
 let spinBtn;
 
