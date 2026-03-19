@@ -144,3 +144,76 @@ window.logout = function(){
 signOut(auth);
 window.location.href = "login.html";
 }
+/* WATCH AD (SIMULATED) */
+window.watchAd = function(){
+alert("Watching Ad...");
+setTimeout(()=>{
+coins += 5;
+updateCoins();
+alert("+5 Coins Earned 🎉");
+},3000);
+}
+
+/* DAILY CHECK-IN */
+window.checkIn = async function(){
+
+let today = new Date().toDateString();
+
+const ref = doc(db,"users",uid);
+const snap = await getDoc(ref);
+
+let last = snap.data().checkin;
+
+if(last == today){
+alert("Already checked in today");
+return;
+}
+
+coins += 10;
+
+await updateDoc(ref,{
+coins: coins,
+checkin: today
+});
+
+updateCoins();
+
+alert("✅ Daily reward +10 coins");
+}
+
+/* REFER SYSTEM (BASIC) */
+window.refer = function(){
+let code = uid.substring(0,6);
+alert("Share this code: " + code + "\nEarn 50 coins per user!");
+}
+
+/* WITHDRAW SYSTEM */
+window.withdraw = async function(){
+
+let upi = document.getElementById("upi").value;
+
+if(upi == ""){
+alert("Enter UPI ID");
+return;
+}
+
+if(wallet < 10){
+alert("Minimum ₹10 required");
+return;
+}
+
+const ref = doc(db,"withdraws", Date.now().toString());
+
+await setDoc(ref,{
+uid: uid,
+upi: upi,
+amount: wallet,
+status: "pending"
+});
+
+wallet = 0;
+
+updateCoins();
+
+alert("Withdrawal Request Sent ✅");
+}
