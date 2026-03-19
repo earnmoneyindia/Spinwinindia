@@ -28,14 +28,26 @@ onAuthStateChanged(auth, async(user)=>{
     const ref = doc(db,"users",uid);
     const snap = await getDoc(ref);
 
-    if(snap.exists()){
-      const data = snap.data() || {};
 
-      coins = data.coins || 0;
-      wallet = data.wallet || 0;
-    }
 
-    updateUI();
+if(snap.exists()){
+  const data = snap.data() || {};
+
+  coins = data.coins || 0;
+  wallet = data.wallet || 0;
+}else{
+  // 🔥 CREATE NEW USER DATA
+  await setDoc(ref,{
+    coins: 50,     // starting bonus
+    wallet: 0
+  });
+
+  coins = 50;
+  wallet = 0;
+}
+
+updateUI(); // 🔥 VERY IMPORTANT
+
   }
 });
 
