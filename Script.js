@@ -208,17 +208,18 @@ alert("Minimum ₹10 required");
 return;
 }
 
+let amount = wallet; // you can change later
+
 const ref = doc(db,"withdraws", Date.now().toString());
 
 await setDoc(ref,{
 uid: uid,
 upi: upi,
-amount: wallet,
+amount: amount,
 status: "pending"
 });
 
-wallet = 0;
-
+wallet -= amount; // safer
 updateCoins();
 
 alert("Withdrawal Request Sent ✅");
