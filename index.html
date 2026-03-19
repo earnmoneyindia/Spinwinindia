@@ -1,144 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Earn Money India - Spin & Win</title>
-
+<title>Spin & Win India 🇮🇳</title>
 <link rel="stylesheet" href="Style.css">
-
-<!-- Google AdSense -->
-<script async
-src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXX"
-crossorigin="anonymous"></script>
-
 </head>
 
 <body>
 
+<button class="logout" onclick="logout()">Logout</button>
+
 <header>
-
-<img src="Swilogo.png" width="200">
-
+<img src="logo.png" class="logo">
 <h1>Spin & Win India 🇮🇳</h1>
-
-<p>Play • Spin • Win Coins</p>
-
-<button onclick="logout()" class="logout">
-Logout
-</button>
-
+<p>Spin & Earn Coins</p>
 </header>
-
-
-<!-- Balance Section -->
-
-<div class="balance">
-
-Coins: <span id="coins">0</span>
-
-|
-
-Wallet: ₹<span id="wallet">0</span>
-
-</div>
-
-
-<!-- Spin Game -->
 
 <div class="container">
 
-<div class="pointer">🔻</div>
+<div class="pointer">▼</div>
 
 <div id="wheel"></div>
 
-<button id="spinBtn">🎯 SPIN</button>
+<button id="spinBtn" onclick="spin()">SPIN (10 Coins)</button>
 
+<button onclick="dailyBonus()">Daily Bonus 🎁</button>
+
+<!-- 🔥 NEW EARNING SYSTEM -->
+<h2>Earn Coins 💰</h2>
+
+<button onclick="watchAd()">Watch Ad (+5)</button>
+<button onclick="checkIn()">Daily Check-in (+10)</button>
+<button onclick="refer()">Refer Friend (+50)</button>
+
+<h2>Withdraw 💸</h2>
+
+<input type="text" id="upi" placeholder="Enter UPI ID">
+<br><br>
+<button onclick="withdraw()">Withdraw ₹</button>
+
+<!-- COINS DISPLAY -->
+<div class="coins">
+Coins: <span id="coins">0</span> |
+Wallet: ₹<span id="wallet">0</span>
 </div>
 
-<!-- Reward Ad -->
-
-<div class="ad-box">
-
-<ins class="adsbygoogle"
-style="display:block"
-data-ad-client="ca-pub-XXXXXXXX"
-data-ad-slot="1234567890"
-data-ad-format="auto"
-data-full-width-responsive="true">
-</ins>
-
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
 </div>
-
-<!-- Menu -->
-
-<div class="menu">
-
-<button onclick="dailyBonus()">
-🎁 Daily Bonus
-</button>
-
-<button onclick="alert('Scratch Card coming soon')">
-🎫 Scratch Card
-</button>
-
-<button onclick="alert('Lucky Number coming soon')">
-🔢 Lucky Number
-</button>
-
-<button onclick="window.location.href='wallet.html'">
-💰 Wallet
-</button>
-
-</div>
-
-<!-- Popup -->
 
 <div class="popup" id="popup">
-
 <div class="popup-content">
-
 <h2 id="resultText"></h2>
-
-<button onclick="closePopup()">OK</button>
-
-</div>
-
-</div>
-  <!-- ads section  -->
-<div class="ad-popup" id="adPopup">
-<div class="ad-box-inner">
-
-<h2>📺 Watch Ad to Continue</h2>
-
-<p id="adTimer">Ad loading...</p>
-
 </div>
 </div>
-  
-<!-- Scripts -->
 
-<script type="module" src="firebase.js"></script>
-<script type="module" src="auth.js"></script>
 <script type="module" src="Script.js"></script>
-<script type="module">
-import { auth } from "./firebase.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-onAuthStateChanged(auth,(user)=>{
-if(!user){
-window.location.href="login.html";
-}
-});
-  </script>
 
 </body>
-
 </html>
