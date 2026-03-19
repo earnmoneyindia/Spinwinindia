@@ -1,26 +1,24 @@
 import { getAuth, onAuthStateChanged, signOut } 
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-import { doc, getDoc, updateDoc, setDoc } 
+import { doc, getDoc, setDoc } 
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import { db } from "./firebase.js";
 
 const auth = getAuth();
 
-let wheel;
-let spinBtn;
-
+let wheel, spinBtn;
 let coins = 0;
 let wallet = 0;
 let uid = "";
 
 let rewards = [5,10,20,0,15,50];
 
-window.onload = function(){
+window.onload = ()=>{
   wheel = document.getElementById("wheel");
   spinBtn = document.getElementById("spinBtn");
-}
+};
 
 /* AUTH */
 onAuthStateChanged(auth, async(user)=>{
@@ -31,35 +29,36 @@ onAuthStateChanged(auth, async(user)=>{
     const snap = await getDoc(ref);
 
     if(snap.exists()){
-      const data = snap.data() || {};  // ✅ SAFE FIX
+      const data = snap.data() || {};
 
       coins = data.coins || 0;
       wallet = data.wallet || 0;
-
-      document.getElementById("coins").innerText = coins;
-      document.getElementById("wallet").innerText = wallet;
     }
+
+    updateUI();
   }
 });
 
-/* SAVE DATA */
+/* SAVE */
 async function saveData(){
+  if(!uid) return;
+
   const ref = doc(db,"users",uid);
   await setDoc(ref,{
-    coins: coins,
-    wallet: wallet
-  },{merge:true});  // ✅ SAFE
+    coins,
+    wallet
+  },{merge:true});
 }
 
-/* UPDATE UI */
-function updateCoins(){
+/* UI */
+function updateUI(){
   convertWallet();
   document.getElementById("coins").innerText = coins;
   document.getElementById("wallet").innerText = wallet;
   saveData();
 }
 
-/* AUTO CONVERT */
+/* CONVERT */
 function convertWallet(){
   if(coins >= 100){
     let r = Math.floor(coins/100);
@@ -69,48 +68,37 @@ function convertWallet(){
 }
 
 /* SPIN */
-window.spin = function(){
-
-  if(!uid){
-    alert("Login required");
-    return;
-  }
-
-  if(coins < 10){
-    alert("Not enough coins");
-    return;
-  }
+window.spin = ()=>{
+  if(!uid) return alert("Login required");
+  if(coins < 10) return alert("Not enough coins");
 
   spinBtn.disabled = true;
 
   coins -= 10;
-  updateCoins();
+  updateUI();
 
-  let sound = new Audio("spin_sound.mp3");
-  sound.play();
+  try{
+    new Audio("spin_sound.mp3").play();
+  }catch(e){}
 
   let rand = Math.floor(Math.random()*6);
   let deg = 720 + rand * 60;
 
-  /* FIXED ROTATION */
   wheel.style.transition = "none";
   wheel.style.transform = "rotate(0deg)";
 
   setTimeout(()=>{
     wheel.style.transition = "transform 4s ease-out";
-    wheel.style.transform = "rotate("+deg+"deg)";
+    wheel.style.transform = `rotate(${deg}deg)`;
   },50);
 
   setTimeout(()=>{
-    let reward = rewards[rand];
-    coins += reward;
-    updateCoins();
-
-    showPopup("🎉 +" + reward + " coins");
-
+    coins += rewards[rand];
+    updateUI();
+    showPopup("🎉 +" + rewards[rand] + " coins");
     spinBtn.disabled = false;
   },4000);
-}
+};
 
 /* POPUP */
 function showPopup(text){
@@ -118,146 +106,102 @@ function showPopup(text){
   document.getElementById("popup").style.display = "flex";
 
   setTimeout(()=>{
-    closePopup();
+    document.getElementById("popup").style.display = "none";
   },2000);
 }
 
-window.closePopup = function(){
-  document.getElementById("popup").style.display = "none";
-}
-
 /* DAILY BONUS */
-window.dailyBonus = async function(){
-
-  if(!uid){
-    alert("Login required");
-    return;
-  }
+window.dailyBonus = async ()=>{
+  if(!uid) return alert("Login required");
 
   let today = new Date().toDateString();
-
   const ref = doc(db,"users",uid);
   const snap = await getDoc(ref);
-  const data = snap.data() || {};   // ✅ FIX
+  const data = snap.data() || {};
 
-  let last = data.daily;
-
-  if(last == today){
-    alert("Already claimed today");
-    return;
+  if(data.daily === today){
+    return alert("Already claimed today");
   }
 
   coins += 20;
 
   await setDoc(ref,{
-    coins: coins,
+    coins,
     daily: today
-  },{merge:true});   // ✅ SAFE
+  },{merge:true});
 
-  updateCoins();
-
+  updateUI();
   alert("🎁 Bonus Added!");
-}
+};
 
 /* WATCH AD */
-window.watchAd = function(){
-
-  if(!uid){
-    alert("Login required");
-    return;
-  }
+window.watchAd = ()=>{
+  if(!uid) return alert("Login required");
 
   alert("Watching Ad...");
   setTimeout(()=>{
     coins += 5;
-    updateCoins();
+    updateUI();
     alert("+5 Coins Earned 🎉");
   },3000);
-}
+};
 
-/* DAILY CHECK-IN */
-window.checkIn = async function(){
-
-  if(!uid){
-    alert("Login required");
-    return;
-  }
+/* CHECK-IN */
+window.checkIn = async ()=>{
+  if(!uid) return alert("Login required");
 
   let today = new Date().toDateString();
-
   const ref = doc(db,"users",uid);
   const snap = await getDoc(ref);
-  const data = snap.data() || {};   // ✅ FIX
+  const data = snap.data() || {};
 
-  let last = data.checkin;
-
-  if(last == today){
-    alert("Already checked in today");
-    return;
+  if(data.checkin === today){
+    return alert("Already checked in today");
   }
 
   coins += 10;
 
   await setDoc(ref,{
-    coins: coins,
+    coins,
     checkin: today
-  },{merge:true});   // ✅ SAFE
+  },{merge:true});
 
-  updateCoins();
-
-  alert("✅ Daily reward +10 coins");
-}
+  updateUI();
+  alert("✅ +10 coins");
+};
 
 /* REFER */
-window.refer = function(){
-  if(!uid){
-    alert("Login required");
-    return;
-  }
-
-  let code = uid.substring(0,6);
-  alert("Share this code: " + code + "\nEarn 50 coins per user!");
-}
+window.refer = ()=>{
+  if(!uid) return alert("Login required");
+  alert("Refer Code: " + uid.substring(0,6));
+};
 
 /* WITHDRAW */
-window.withdraw = async function(){
+window.withdraw = async ()=>{
+  if(!uid) return alert("Login required");
 
-  if(!uid){
-    alert("Login required");
-    return;
-  }
+  let upi = document.getElementById("upi").value.trim();
 
-  let upi = document.getElementById("upi").value;
-
-  if(upi == ""){
-    alert("Enter UPI ID");
-    return;
-  }
-
-  if(wallet < 10){
-    alert("Minimum ₹10 required");
-    return;
-  }
+  if(!upi) return alert("Enter UPI ID");
+  if(wallet < 10) return alert("Minimum ₹10 required");
 
   let amount = wallet;
 
-  const ref = doc(db,"withdraws", Date.now().toString());
-
-  await setDoc(ref,{
-    uid: uid,
-    upi: upi,
-    amount: amount,
-    status: "pending"
+  await setDoc(doc(db,"withdraws",Date.now().toString()),{
+    uid,
+    upi,
+    amount,
+    status:"pending"
   });
 
-  wallet -= amount;
-  updateCoins();
+  wallet = 0;
+  updateUI();
 
-  alert("Withdrawal Request Sent ✅");
-}
+  alert("Withdrawal Requested ✅");
+};
 
 /* LOGOUT */
-window.logout = function(){
+window.logout = ()=>{
   signOut(auth);
-  window.location.href = "login.html";
-}
+  location.href = "login.html";
+};
