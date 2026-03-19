@@ -7,8 +7,7 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { db } from "./firebase.js";
 
 const auth = getAuth();
-const data = snap.data() || {};
-let last = data.daily;
+
 let wheel;
 let spinBtn;
 
@@ -19,209 +18,246 @@ let uid = "";
 let rewards = [5,10,20,0,15,50];
 
 window.onload = function(){
-wheel = document.getElementById("wheel");
-spinBtn = document.getElementById("spinBtn");
+  wheel = document.getElementById("wheel");
+  spinBtn = document.getElementById("spinBtn");
 }
 
+/* AUTH */
 onAuthStateChanged(auth, async(user)=>{
-if(user){
-uid = user.uid;
+  if(user){
+    uid = user.uid;
 
-const ref = doc(db,"users",uid);
-const snap = await getDoc(ref);
+    const ref = doc(db,"users",uid);
+    const snap = await getDoc(ref);
 
-if(snap.exists()){
-coins = snap.data().coins || 0;
-wallet = snap.data().wallet || 0;
+    if(snap.exists()){
+      const data = snap.data() || {};  // ✅ SAFE FIX
 
-document.getElementById("coins").innerText = coins;
-document.getElementById("wallet").innerText = wallet;
-}
-}
+      coins = data.coins || 0;
+      wallet = data.wallet || 0;
+
+      document.getElementById("coins").innerText = coins;
+      document.getElementById("wallet").innerText = wallet;
+    }
+  }
 });
 
 /* SAVE DATA */
 async function saveData(){
-const ref = doc(db,"users",uid);
-await updateDoc(ref,{
-coins: coins,
-wallet: wallet
-});
+  const ref = doc(db,"users",uid);
+  await setDoc(ref,{
+    coins: coins,
+    wallet: wallet
+  },{merge:true});  // ✅ SAFE
 }
 
 /* UPDATE UI */
 function updateCoins(){
-convertWallet();
-document.getElementById("coins").innerText = coins;
-document.getElementById("wallet").innerText = wallet;
-saveData();
+  convertWallet();
+  document.getElementById("coins").innerText = coins;
+  document.getElementById("wallet").innerText = wallet;
+  saveData();
 }
 
 /* AUTO CONVERT */
 function convertWallet(){
-if(coins >= 100){
-let r = Math.floor(coins/100);
-wallet += r;
-coins = coins % 100;
-}
+  if(coins >= 100){
+    let r = Math.floor(coins/100);
+    wallet += r;
+    coins = coins % 100;
+  }
 }
 
 /* SPIN */
 window.spin = function(){
 
-if(coins < 10){
-alert("Not enough coins");
-return;
-}
+  if(!uid){
+    alert("Login required");
+    return;
+  }
 
-spinBtn.disabled = true;
+  if(coins < 10){
+    alert("Not enough coins");
+    return;
+  }
 
-coins -= 10;
-updateCoins();
+  spinBtn.disabled = true;
 
-let sound = new Audio("spin_sound.mp3");
-sound.play();
+  coins -= 10;
+  updateCoins();
 
-let rand = Math.floor(Math.random()*6);
-let deg = 720 + rand * 60;
+  let sound = new Audio("spin_sound.mp3");
+  sound.play();
 
-wheel.style.transition = "none";
-wheel.style.transform = "rotate(0deg)";
+  let rand = Math.floor(Math.random()*6);
+  let deg = 720 + rand * 60;
 
-setTimeout(()=>{
-wheel.style.transition = "transform 4s ease-out";
-wheel.style.transform = "rotate("+deg+"deg)";
-},50);
+  /* FIXED ROTATION */
+  wheel.style.transition = "none";
+  wheel.style.transform = "rotate(0deg)";
 
-setTimeout(()=>{
-let reward = rewards[rand];
-coins += reward;
-updateCoins();
+  setTimeout(()=>{
+    wheel.style.transition = "transform 4s ease-out";
+    wheel.style.transform = "rotate("+deg+"deg)";
+  },50);
 
-showPopup("🎉 +" + reward + " coins");
+  setTimeout(()=>{
+    let reward = rewards[rand];
+    coins += reward;
+    updateCoins();
 
-spinBtn.disabled = false;
+    showPopup("🎉 +" + reward + " coins");
 
-},4000);
+    spinBtn.disabled = false;
+  },4000);
 }
 
 /* POPUP */
 function showPopup(text){
-document.getElementById("resultText").innerText = text;
-document.getElementById("popup").style.display = "flex";
+  document.getElementById("resultText").innerText = text;
+  document.getElementById("popup").style.display = "flex";
 
-setTimeout(()=>{
-closePopup();
-},2000);
+  setTimeout(()=>{
+    closePopup();
+  },2000);
 }
 
 window.closePopup = function(){
-document.getElementById("popup").style.display = "none";
+  document.getElementById("popup").style.display = "none";
 }
 
 /* DAILY BONUS */
 window.dailyBonus = async function(){
 
-let today = new Date().toDateString();
+  if(!uid){
+    alert("Login required");
+    return;
+  }
 
-const ref = doc(db,"users",uid);
-const snap = await getDoc(ref);
+  let today = new Date().toDateString();
 
-let last = snap.data().daily;
+  const ref = doc(db,"users",uid);
+  const snap = await getDoc(ref);
+  const data = snap.data() || {};   // ✅ FIX
 
-if(last == today){
-alert("Already claimed today");
-return;
+  let last = data.daily;
+
+  if(last == today){
+    alert("Already claimed today");
+    return;
+  }
+
+  coins += 20;
+
+  await setDoc(ref,{
+    coins: coins,
+    daily: today
+  },{merge:true});   // ✅ SAFE
+
+  updateCoins();
+
+  alert("🎁 Bonus Added!");
 }
 
-coins += 20;
-
-await updateDoc(ref,{
-coins: coins,
-daily: today
-});
-
-updateCoins();
-
-alert("🎁 Bonus Added!");
-}
-
-/* LOGOUT */
-window.logout = function(){
-signOut(auth);
-window.location.href = "login.html";
-}
-/* WATCH AD (SIMULATED) */
+/* WATCH AD */
 window.watchAd = function(){
-alert("Watching Ad...");
-setTimeout(()=>{
-coins += 5;
-updateCoins();
-alert("+5 Coins Earned 🎉");
-},3000);
+
+  if(!uid){
+    alert("Login required");
+    return;
+  }
+
+  alert("Watching Ad...");
+  setTimeout(()=>{
+    coins += 5;
+    updateCoins();
+    alert("+5 Coins Earned 🎉");
+  },3000);
 }
 
 /* DAILY CHECK-IN */
 window.checkIn = async function(){
 
-let today = new Date().toDateString();
+  if(!uid){
+    alert("Login required");
+    return;
+  }
 
-const ref = doc(db,"users",uid);
-const snap = await getDoc(ref);
+  let today = new Date().toDateString();
 
-let last = snap.data().checkin;
+  const ref = doc(db,"users",uid);
+  const snap = await getDoc(ref);
+  const data = snap.data() || {};   // ✅ FIX
 
-if(last == today){
-alert("Already checked in today");
-return;
+  let last = data.checkin;
+
+  if(last == today){
+    alert("Already checked in today");
+    return;
+  }
+
+  coins += 10;
+
+  await setDoc(ref,{
+    coins: coins,
+    checkin: today
+  },{merge:true});   // ✅ SAFE
+
+  updateCoins();
+
+  alert("✅ Daily reward +10 coins");
 }
 
-coins += 10;
-
-await updateDoc(ref,{
-coins: coins,
-checkin: today
-});
-
-updateCoins();
-
-alert("✅ Daily reward +10 coins");
-}
-
-/* REFER SYSTEM (BASIC) */
+/* REFER */
 window.refer = function(){
-let code = uid.substring(0,6);
-alert("Share this code: " + code + "\nEarn 50 coins per user!");
+  if(!uid){
+    alert("Login required");
+    return;
+  }
+
+  let code = uid.substring(0,6);
+  alert("Share this code: " + code + "\nEarn 50 coins per user!");
 }
 
-/* WITHDRAW SYSTEM */
+/* WITHDRAW */
 window.withdraw = async function(){
 
-let upi = document.getElementById("upi").value;
+  if(!uid){
+    alert("Login required");
+    return;
+  }
 
-if(upi == ""){
-alert("Enter UPI ID");
-return;
+  let upi = document.getElementById("upi").value;
+
+  if(upi == ""){
+    alert("Enter UPI ID");
+    return;
+  }
+
+  if(wallet < 10){
+    alert("Minimum ₹10 required");
+    return;
+  }
+
+  let amount = wallet;
+
+  const ref = doc(db,"withdraws", Date.now().toString());
+
+  await setDoc(ref,{
+    uid: uid,
+    upi: upi,
+    amount: amount,
+    status: "pending"
+  });
+
+  wallet -= amount;
+  updateCoins();
+
+  alert("Withdrawal Request Sent ✅");
 }
 
-if(wallet < 10){
-alert("Minimum ₹10 required");
-return;
-}
-
-let amount = wallet; // you can change later
-
-const ref = doc(db,"withdraws", Date.now().toString());
-
-await setDoc(ref,{
-uid: uid,
-upi: upi,
-amount: amount,
-status: "pending"
-});
-
-wallet -= amount; // safer
-updateCoins();
-
-alert("Withdrawal Request Sent ✅");
+/* LOGOUT */
+window.logout = function(){
+  signOut(auth);
+  window.location.href = "login.html";
 }
