@@ -1,8 +1,7 @@
-import { setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signOut } 
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-import { doc, getDoc, updateDoc } 
+import { doc, getDoc, updateDoc, setDoc } 
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import { db } from "./firebase.js";
@@ -85,7 +84,13 @@ sound.play();
 let rand = Math.floor(Math.random()*6);
 let deg = 720 + rand * 60;
 
+wheel.style.transition = "none";
+wheel.style.transform = "rotate(0deg)";
+
+setTimeout(()=>{
+wheel.style.transition = "transform 4s ease-out";
 wheel.style.transform = "rotate("+deg+"deg)";
+},50);
 
 setTimeout(()=>{
 let reward = rewards[rand];
