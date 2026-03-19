@@ -1,114 +1,109 @@
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(180deg, #0f172a, #1e293b);
-  color: white;
-  text-align: center;
+body{
+font-family:Arial;
+text-align:center;
+background:#111 url("Medh.png") no-repeat center/cover;
+color:white;
+margin:0;
+}
+
+/* LOGO TOP LEFT */
+.logo{
+position:absolute;
+top:10px;
+left:10px;
+width:60px;
+}
+
+/* LOGOUT BUTTON TOP RIGHT */
+.logout{
+position:absolute;
+top:10px;
+right:10px;
+background:#ff4444;
+padding:8px 12px;
+border:none;
+border-radius:6px;
+color:white;
+cursor:pointer;
 }
 
 /* HEADER */
-header {
-  padding: 15px;
+header{
+margin-top:60px;
 }
 
-h1 {
-  font-size: 28px;
-  color: #facc15;
+h1{
+color:#ffcc00;
+margin:5px;
 }
 
-p {
-  color: #cbd5f5;
-}
-
-/* GLASS CARD */
-.card {
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
-  margin: 15px;
-  padding: 15px;
-  border-radius: 15px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-}
-
-/* WALLET TEXT */
-#wallet, #coins {
-  font-size: 20px;
-  color: #facc15;
-  font-weight: bold;
+/* MAIN CONTAINER */
+.container{
+margin-top:20px;
 }
 
 /* WHEEL */
-#wheel {
-  width: 260px;
-  height: 260px;
-  border-radius: 50%;
-  border: 6px solid #facc15;
-  margin: 20px auto;
-  box-shadow: 0 0 25px rgba(250,204,21,0.6);
+#wheel{
+width:260px;
+height:260px;
+border-radius:50%;
+border:8px solid #fff;
+margin:20px auto;
+background:conic-gradient(
+#ff5722 0deg 60deg,
+#4caf50 60deg 120deg,
+#2196f3 120deg 180deg,
+#ffeb3b 180deg 240deg,
+#9c27b0 240deg 300deg,
+#00bcd4 300deg 360deg
+);
+transition:transform 4s ease-out;
 }
 
-/* BUTTON */
-button {
-  background: linear-gradient(135deg, #facc15, #f97316);
-  border: none;
-  border-radius: 12px;
-  padding: 14px 22px;
-  color: black;
-  font-weight: bold;
-  font-size: 16px;
-  margin: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-  transition: 0.2s;
+/* POINTER */
+.pointer{
+font-size:30px;
+margin-top:10px;
 }
 
-button:active {
-  transform: scale(0.95);
+/* BUTTONS FIXED SIZE */
+button{
+padding:10px 20px;
+font-size:16px;
+background:#ff9800;
+border:none;
+border-radius:8px;
+color:white;
+cursor:pointer;
+margin:8px;
+width:auto; /* FIX: no full width */
 }
 
-/* SECONDARY BUTTON */
-.secondary {
-  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-  color: white;
+button:hover{
+background:#ff5722;
 }
 
-/* AD BUTTON */
-#adBtn {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-}
-
-/* LIMIT TEXT */
-#limitInfo {
-  font-size: 14px;
-  color: #94a3b8;
+/* COINS DISPLAY */
+.coins{
+font-size:18px;
+margin-top:10px;
 }
 
 /* POPUP */
-#popup {
-  position: fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  display:none;
-  justify-content:center;
-  align-items:center;
-  background: rgba(0,0,0,0.7);
+.popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.7);
+display:none;
+justify-content:center;
+align-items:center;
 }
 
-#popupContent {
-  background:#1e293b;
-  padding:20px;
-  border-radius:12px;
-  color:#fff;
-  font-size:18px;
-}
-
-/* BANNER AD */
-#bannerAd {
-  margin: 15px;
-}
-
-/* FOOTER SPACE */
-.spacer {
-  height: 20px;
+.popup-content{
+background:#222;
+padding:25px;
+border-radius:10px;
 }
