@@ -28,6 +28,20 @@ color:#ffd700;
 margin-top:30px;
 }
 
+  .wallet{
+background:#1a1a1a;
+padding:15px;
+margin:15px;
+border-radius:10px;
+box-shadow:0 0 10px #00e676;
+}
+.wallet button{
+background:#00c853;
+}
+.wallet button:hover{
+background:#00e676;
+}
+
 #wheel{
 width:280px;
 height:280px;
@@ -124,6 +138,7 @@ border:none;
 
 <button onclick="login()">Start Playing</button>
 
+loadWallet();
 </div>
 
 <!-- GAME -->
@@ -138,6 +153,16 @@ Coins: <span id="coins">0</span>
 
 <div class="pointer">🔻</div>
 
+  <div class="wallet">
+<h3>💰 Wallet</h3>
+
+<p>Balance: ₹ <span id="balance">0</span></p>
+
+<button onclick="addMoney()">➕ Add Money</button>
+<button onclick="withdraw()">💸 Withdraw</button>
+
+</div>
+
 <div id="wheel"></div>
 
 <button onclick="spin()">SPIN (10 coins)</button>
@@ -146,6 +171,8 @@ Coins: <span id="coins">0</span>
 
 <div class="menu">
 
+<button onclick="convertCoins()">💱 Convert Coins</button>
+
 <button onclick="dailyBonus()">🎁 Daily Bonus</button>
 
 <button onclick="scratchCard()">🎫 Scratch Card</button>
@@ -153,6 +180,7 @@ Coins: <span id="coins">0</span>
 <button onclick="luckyNumber()">🔢 Lucky Number</button>
 
 <button onclick="leaderboard()">🏆 Leaderboard</button>
+  
 
 </div>
 
@@ -191,7 +219,6 @@ if(username==""){
 alert("Enter username")
 
 return
-
 }
 
 document.getElementById("login").style.display="none"
@@ -321,6 +348,73 @@ updateCoins()
 function leaderboard(){
 
 alert("Leaderboard coming soon")
+
+}
+
+  let balance = 0;
+
+// Load wallet on login
+function loadWallet(){
+balance = parseInt(localStorage.getItem(username+"_balance")) || 0;
+document.getElementById("balance").innerText = balance;
+}
+
+// Update wallet
+function updateWallet(){
+document.getElementById("balance").innerText = balance;
+localStorage.setItem(username+"_balance", balance);
+}
+
+// Add Money (Demo)
+function addMoney(){
+let amt = prompt("Enter amount to add (₹):");
+
+if(amt && amt > 0){
+balance += parseInt(amt);
+updateWallet();
+alert("₹"+amt+" added to wallet");
+}
+}
+
+// Withdraw (Demo)
+function withdraw(){
+
+if(balance < 100){
+alert("Minimum withdrawal ₹100");
+return;
+}
+
+let amt = prompt("Enter amount to withdraw:");
+
+if(amt > balance){
+alert("Not enough balance");
+return;
+}
+
+balance -= parseInt(amt);
+updateWallet();
+
+alert("Withdrawal requested: ₹"+amt+"\n(Payment coming soon)");
+}
+
+  function convertCoins(){
+
+if(coins < 100){
+alert("Need minimum 100 coins");
+return;
+}
+
+// 100 coins = ₹10
+let money = Math.floor(coins / 100) * 10;
+
+coins = coins % 100;
+
+balance += money;
+
+updateCoins();
+updateWallet();
+
+showPopup("Converted to ₹"+money);
 
 }
 
