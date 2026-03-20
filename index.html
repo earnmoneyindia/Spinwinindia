@@ -138,7 +138,7 @@ border:none;
 
 <button onclick="login()">Start Playing</button>
 
-loadWallet();
+
 </div>
 
 <!-- GAME -->
@@ -228,6 +228,8 @@ document.getElementById("game").style.display="block"
 coins=parseInt(localStorage.getItem(username+"_coins"))||100
 
 updateCoins()
+  
+loadWallet();
 
 }
 
